@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redes Credenciadas - LEXXA</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 h-full flex flex-col antialiased">
+
+    <!-- Header -->
+    <header class="bg-indigo-700 text-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 p-2.5 rounded-xl border border-indigo-500 shadow-inner">
+                    <i class="fa-solid fa-address-book text-2xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Redes Credenciadas - LEXXA</h1>
+                    <p class="text-xs sm:text-sm text-indigo-200">Gerenciamento por Estados, Regiões e Contatos</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+                <button onclick="openExportModal()" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-xl transition shadow-sm border border-indigo-500">
+                    <i class="fa-solid fa-download"></i> Exportar/Importar
+                </button>
+                <button onclick="openModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium px-4 py-2 rounded-xl transition shadow-sm">
+                    <i class="fa-solid fa-plus"></i> Novo Registro
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col gap-6">
+        
+        <!-- Search and Filter Bar -->
+        <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div class="relative w-full md:w-96">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" id="searchInput" oninput="filterData()" placeholder="Buscar por técnico, região, estado ou telefone..." 
+                    class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <label for="stateFilter" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Estado:</label>
+                    <select id="stateFilter" onchange="filterData()" class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 flex-grow sm:flex-grow-0">
+                        <option value="">Todos os Estados</option>
+                    </select>
+                </div>
+
+                <button onclick="resetFilters()" class="text-sm text-slate-500 hover:text-indigo-600 px-3 py-2 rounded-xl hover:bg-slate-100 transition font-medium">
+                    <i class="fa-solid fa-rotate-right mr-1"></i> Limpar Filtros
+                </button>
+            </div>
+        </div>
+
+        <!-- Notification Banner Container -->
+        <div id="notificationArea"></div>
+
+        <!-- Results Container -->
+        <div id="directoryContainer" class="space-y-6">
+            <!-- Dynamic Cards inserted here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden flex flex-col items-center justify-center p-12 text-center bg-white rounded-2xl border border-slate-200 shadow-sm">
+            <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center text-2xl mb-4">
+                <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-700 mb-1">Nenhum registro encontrado</h3>
+            <p class="text-sm text-slate-500 max-w-sm mb-6">Tente buscar por outro termo ou adicione um novo técnico/parceiro ao diretório.</p>
+            <button onclick="openModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition shadow-sm">
+                Adicionar Novo Registro
+            </button>
+        </div>
+    </main>
+
+    <!-- Modal for Add/Edit Record -->
+    <div id="recordModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full overflow-hidden border border-slate-200 transform transition-all">
+            <div class="bg-indigo-700 px-6 py-4 text-white flex justify-between items-center">
+                <h3 id="modalTitle" class="text-lg font-bold">Novo Registro de Técnico/Parceiro</h3>
+                <button onclick="closeModal()" class="text-indigo-200 hover:text-white p-1 rounded-lg transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <form id="recordForm" onsubmit="saveRecord(event)" class="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+                <input type="hidden" id="recordId">
+                
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Estado / Região Principal *</label>
+                    <select id="formState" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="">Selecione o Estado</option>
+                        <option value="Rio Grande do Sul">Rio Grande do Sul</option>
+                        <option value="Minas Gerais">Minas Gerais</option>
+                        <option value="Curitiba - Paraná">Curitiba - Paraná</option>
+                        <option value="São Paulo">São Paulo</option>
+                        <option value="Mato Grosso do Sul">Mato Grosso do Sul</option>
+                        <option value="Rio de Janeiro">Rio de Janeiro</option>
+                        <option value="Belo Horizonte">Belo Horizonte</option>
+                        <option value="Goiânia e Brasília">Goiânia e Brasília</option>
+                        <option value="Fortaleza">Fortaleza</option>
+                        <option value="Recife">Recife</option>
+                        <option value="Outro">Outro (Novo Estado)</option>
+                    </select>
+                </div>
+
+                <div id="customStateContainer" class="hidden">
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Nome do Novo Estado *</label>
+                    <input type="text" id="formCustomState" placeholder="Ex: Santa Catarina" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Nome do Técnico / Parceiro *</label>
+                    <input type="text" id="formName" required placeholder="Ex: Tiago Souza (2026)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Área de Atuação / Região Atendida *</label>
+                    <textarea id="formRegion" required rows="3" placeholder="Ex: Porto Alegre e Região Metropolitana. Atende Rio Grande e Pelotas (60km)..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Informações / Telefones de Contato *</label>
+                    <input type="text" id="formInfo" required placeholder="Ex: (51) 994683323 ou Chave Pix" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-xl transition">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-xl transition shadow-sm">
+                        Salvar Registro
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Export/Import Modal -->
+    <div id="exportModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full overflow-hidden border border-slate-200">
+            <div class="bg-indigo-700 px-6 py-4 text-white flex justify-between items-center">
+                <h3 class="text-lg font-bold">Exportar / Importar Dados</h3>
+                <button onclick="closeExportModal()" class="text-indigo-200 hover:text-white p-1 rounded-lg transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <p class="text-sm text-slate-600">Você pode exportar todos os dados atuais em formato JSON para backup ou importar um arquivo JSON salvo anteriormente.</p>
+                
+                <div>
+                    <button onclick="exportData()" class="w-full mb-3 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-xl transition shadow-sm text-sm">
+                        <i class="fa-solid fa-download"></i> Baixar Backup (JSON)
+                    </button>
+                </div>
+
+                <div class="border-t border-slate-200 pt-4">
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Restaurar / Importar Dados</label>
+                    <input type="file" id="importFile" accept=".json" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                    <button onclick="importData()" class="mt-2 w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-900 text-white font-medium py-2.5 px-4 rounded-xl transition shadow-sm text-sm">
+                        <i class="fa-solid fa-upload"></i> Carregar Arquivo JSON
+                    </button>
+                </div>
+
+                <div class="border-t border-slate-200 pt-4 flex justify-between items-center">
+                    <button onclick="resetToDefaultData()" class="text-xs text-rose-600 hover:text-rose-700 font-medium underline">
+                        Restaurar dados originais da imagem
+                    </button>
+                    <button onclick="closeExportModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-xl transition">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 mt-auto">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>Diretório de Técnicos e Parceiros &copy; 2026 - Dados salvos no armazenamento local (localStorage) do navegador.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Default initial data extracted from the image
+        const defaultDirectoryData = [
+            // Rio Grande do Sul
+            {
+                id: "rs-1",
+                state: "Rio Grande do Sul",
+                name: "Tiago Souza (2026)",
+                region: "Porto Alegre e Região Metropolitana. Atende Rio Grande e Pelotas (60km)",
+                info: "(51) 994683323 / (51) 30156785"
+            },
+            {
+                id: "rs-2",
+                state: "Rio Grande do Sul",
+                name: "Anttes (Segunda opção)",
+                region: "Anta Gorda, Arroio do Meio, Arvorezinha, Bom Retiro do Sul, Canudos do Valle, Capitão, Colinas, Coqueiro Baixo, Cruzeiro do Sul, Dois Lajeados, Doutor Ricardo, Encantado, Estrela, Fazenda Vilanova, Forquetinha, Ídpolis, Imigrante, Lajeado, Marques de Souza, Muçum, Nova Bréscia",
+                info: "(51) 96833334"
+            },
+            {
+                id: "rs-3",
+                state: "Rio Grande do Sul",
+                name: "Jorge Adriano Basso Monteiro",
+                region: "Cocho e arredores",
+                info: "(51) 991879609"
+            },
+            {
+                id: "rs-4",
+                state: "Rio Grande do Sul",
+                name: "Mineiro",
+                region: "Cocho e arredores",
+                info: "(54) 991269404"
+            },
+            {
+                id: "rs-5",
+                state: "Rio Grande do Sul",
+                name: "Soberano Soluções Hidráulicas - Fernando",
+                region: "Cruz Alta e arredores",
+                info: "(51) 96767798"
+            },
+            {
+                id: "rs-6",
+                state: "Rio Grande do Sul",
+                name: "Água (Thiago)",
+                region: "Santa Maria",
+                info: "(55) 99832757"
+            },
+            {
+                id: "rs-7",
+                state: "Rio Grande do Sul",
+                name: "Elixir (Efapi)",
+                region: "Atende um raio de 130km de Chapecó, Joaçaba, Videira, Caçador, Concórdia, Maravilha, (Rio RS): Nonotai, Trindade, Três Palmeiras, Frederico Westphalen",
+                info: "(49) 988300329"
+            },
+            {
+                id: "rs-8",
+                state: "Rio Grande do Sul",
+                name: "HidrotecRS - Rezmini Hidráulico - Marcos André",
+                region: "Canoas, Sapucaia, Esteio, Gravataí, Cachoeirinha, Nova Santa Rita, Guaíba e todo Litoral menos Torres",
+                info: "(51) 992375092"
+            },
+            {
+                id: "rs-9",
+                state: "Rio Grande do Sul",
+                name: "Eletrosserro",
+                region: "Gramado e Canela",
+                info: "(54) 99031237"
+            },
+            {
+                id: "rs-10",
+                state: "Rio Grande do Sul",
+                name: "Hidro - Reparos - Charles",
+                region: "Erechim, Carazinho, Não me Toque, Marau, Passo Fundo, Sarandi, Tapera, Tapejara, Ibirubá, Espumoso, Lagoa Vermelha, Coxilha e Guaporé",
+                info: "(54) 99504947"
+            },
+            {
+                id: "rs-11",
+                state: "Rio Grande do Sul",
+                name: "Diego - Multi Água (Tobatto)",
+                region: "Anta Gorda, Arroio do Meio, Arvorezinha, Bom Retiro do Sul, Canudos do Valle, Capitão, Colinas, Coqueiro Baixo, Cruzeiro do Sul, Dois Lajeados, Doutor Ricardo, Encantado, Estrela, Fazenda Vilanova, Forquetinha, Ídpolis, Imigrante, Lajeado, Marques de Souza, Muçum, Nova Bréscia, entre ou",
+                info: "(51) 99090688"
+            },
+            {
+                id: "rs-12",
+                state: "Rio Grande do Sul",
+                name: "Müller Comercial - Alexandre 2025",
+                region: "Novo Hamburgo, São Leopoldo, Estância Velha, Ivoti, Dois Irmãos, Sapiranga, Campo Bom, Cachoeirinha, Gramotai",
+                info: "313972307"
+            },
+            {
+                id: "rs-13",
+                state: "Rio Grande do Sul",
+                name: "Solution Assis",
+                region: "Brochinu, Barão de Cotegipe, Getúlio Vargas, Três Arroios, Severiano de Almeida, Concórdia, Gourama, Viadutos, Marcelino Ramos",
+                info: "(54) 99070414"
+            },
+            {
+                id: "rs-14",
+                state: "Rio Grande do Sul",
+                name: "Dalvani dos Santos - 2025",
+                region: "Santa Rosa, Oliva, Ijui, Candói, Cristo Rei, Santo Ângelo, Santiago, São Borja",
+                info: "(55) 21205238"
+            },
+            {
+                id: "rs-15",
+                state: "Rio Grande do Sul",
+                name: "Kiko - Hidráulico - 2025",
+                region: "Lajeado e Arredores",
+                info: "(51) 99960203"
+            },
+            {
+                id: "rs-16",
+                state: "Rio Grande do Sul",
+                name: "Água Quente - Chucca",
+                region: "SC - Criciúma, Araranguá, Içara, Morro da Fumaça, Urussanga, Siderópolis, Nova Veneza",
+                info: "(48) 99776711"
+            },
+            {
+                id: "rs-17",
+                state: "Rio Grande do Sul",
+                name: "AM Reparos (Eduardo)",
+                region: "Região de SC - Criciúma",
+                info: "(48) 96085321"
+            },
+
+            // Minas Gerais
+            {
+                id: "mg-1",
+                state: "Minas Gerais",
+                name: "Rios Dos Reparos (Sebastião)",
+                region: "Ponte Nova, Carandaí, Barbacena, São Gatias, Presidente Olgario, Lagoa Formosa, Patrocínio e Região até 100km",
+                info: "(34) 99151072"
+            },
+            {
+                id: "mg-2",
+                state: "Minas Gerais",
+                name: "Stefano Dutra ME 2025",
+                region: "Varginha, M.E., Alfenas, Paraguaçu, Elói Mendes, Tres Corações, Três Pontas",
+                info: "(35) 992861400"
+            },
+            {
+                id: "mg-3",
+                state: "Minas Gerais",
+                name: "Marcondes - Furabolin",
+                region: "Nova Serrana, Formiga, Divinópolis, Boa Esperança e Arca",
+                info: "(37) 99108907"
+            },
+
+            // Curitiba - Paraná
+            {
+                id: "pr-1",
+                state: "Curitiba - Paraná",
+                name: "Luiz Hidráulico LG",
+                region: "Toledo, Cascavel",
+                info: "(45) 998276179"
+            },
+            {
+                id: "pr-2",
+                state: "Curitiba - Paraná",
+                name: "Alex - ASS Instalações",
+                region: "Curitiba",
+                info: "(41) 98660992"
+            },
+            {
+                id: "pr-3",
+                state: "Curitiba - Paraná",
+                name: "Rui Da Tomeira (Rafael) 2026",
+                region: "Curitiba",
+                info: "(41) 992432019"
+            },
+
+            // São Paulo
+            {
+                id: "sp-1",
+                state: "São Paulo",
+                name: "SOS Soluções e Reparos",
+                region: "Região de Santos/SP",
+                info: "(13) 33027221, (13) 98114-0551"
+            },
+            {
+                id: "sp-2",
+                state: "São Paulo",
+                name: "Hidráulica Martins",
+                region: "Região de Piracicaba",
+                info: "(19) 38173514, (19) 98131-9791"
+            },
+            {
+                id: "sp-3",
+                state: "São Paulo",
+                name: "Technica Rafael",
+                region: "São Paulo/Capital",
+                info: "(11) 984589077"
+            },
+            {
+                id: "sp-4",
+                state: "São Paulo",
+                name: "Hidrotermas SP - Técnico Gustavo",
+                region: "Araraquara, São Carlos, Alphaville e forcana de Antônio de Pernalta",
+                info: "(11) 974151777"
+            },
+            {
+                id: "sp-5",
+                state: "São Paulo",
+                name: "Adriano Terrassa - Instalação André",
+                region: "Santo André, São Caetano, Diadema, Mauá, Osasco, SP (até 100km)",
+                info: "(11) 992984979"
+            },
+            {
+                id: "sp-6",
+                state: "São Paulo",
+                name: "Richard Douglas Correga",
+                region: "Ribeirão Pires/SP (20km)",
+                info: "(11) 97911-2311"
+            },
+            {
+                id: "sp-7",
+                state: "São Paulo",
+                name: "Nelson Salvador Junior - MF 10 Hidráulica (recurso hidroflex)",
+                region: "Atende Cidade de Mauá e Raio de 100km",
+                info: "(11) 984033178"
+            },
+            {
+                id: "sp-8",
+                state: "São Paulo",
+                name: "Celso (Villas Boas Manutenções Residenciais)",
+                region: "Poá, Itaquaquecetuba, Mogi das Cruzes, Região",
+                info: "(11) 973161257"
+            },
+            {
+                id: "sp-9",
+                state: "São Paulo",
+                name: "Daxet Soluções em Hidráulica (Técnico Cleoson)",
+                region: "Pirassununga, Piracicaba, Ribeirão Preto e Raio de 100KM, 1.50 KM raio",
+                info: "(19) 993111339"
+            },
+            {
+                id: "sp-10",
+                state: "São Paulo",
+                name: "SOS - Tec Médicos",
+                region: "Campinas/SP",
+                info: "(19) 941149892"
+            },
+            {
+                id: "sp-11",
+                state: "São Paulo",
+                name: "Fios dos Reparos",
+                region: "Ribeirão Preto/SP",
+                info: "(19) 997389431"
+            },
+            {
+                id: "sp-12",
+                state: "São Paulo",
+                name: "Technica Rocha",
+                region: "Santos, São Vicente, Praia Grande e Mongaguá",
+                info: "(11) 994086192"
+            },
+            {
+                id: "sp-13",
+                state: "São Paulo",
+                name: "Fdson",
+                region: "Araraquara",
+                info: "(19) 991041493"
+            },
+            {
+                id: "sp-14",
+                state: "São Paulo",
+                name: "Moncaiva",
+                region: "Mooca",
+                info: "(11) 993819503"
+            },
+            {
+                id: "sp-15",
+                state: "São Paulo",
+                name: "Yuri Mandelli - Aluguel(Vídeo) 2025",
+                region: "Jundiaí, Várzea, Campo Limpo Paulista, Vinhedo e Louveira",
+                info: "(11) 993859603"
+            },
+            {
+                id: "sp-16",
+                state: "São Paulo",
+                name: "JS Soluções Hidráulicas (Cesar) 2025",
+                region: "Atende somente SP Capital",
+                info: "(11) 961078380"
+            },
+
+            // Mato Grosso do Sul
+            {
+                id: "ms-1",
+                state: "Mato Grosso do Sul",
+                name: "Fábio (Casa dos Reparos) 2025",
+                region: "Dourados, Mato Grosso do Sul",
+                info: "(67) 994883200 - Somente ligação"
+            },
+
+            // Rio de Janeiro
+            {
+                id: "rj-1",
+                state: "Rio de Janeiro",
+                name: "RGS Instalações Hidráulicas",
+                region: "Rio de Janeiro",
+                info: "(21) 996121540"
+            },
+            {
+                id: "rj-2",
+                state: "Rio de Janeiro",
+                name: "Tech Nat Assistencia Tecnica (Pamela ou Manuel)",
+                region: "Todo RJ",
+                info: "(21) 978363896"
+            },
+            {
+                id: "rj-3",
+                state: "Rio de Janeiro",
+                name: "SD Com de Ferramentas e Hidráulicos (Daniel) 2026",
+                region: "Todo RJ",
+                info: "(21) 970865307"
+            },
+
+            // Belo Horizonte
+            {
+                id: "bh-1",
+                state: "Belo Horizonte",
+                name: "Canguuu Soluções Hidráulicas 2025",
+                region: "Betim, Belo Horizonte, Betim, Brumadinho, Caeté, Capim Branco, Confins, Contagem, Esmeraldas, Florestal, Ibirité, Igarapé, Itaguara, Itabirito, Jaboticatubas, Juatuba, Lagoa Santa, Mário Campos, Mateus Leme, Matozinhos, Nova Lima, Nova União",
+                info: "(31) 30421240 / 30241248 / 997205001 - ZAP (31) 994610100"
+            },
+
+            // Goiânia e Brasília
+            {
+                id: "gb-1",
+                state: "Goiânia e Brasília",
+                name: "Max Hidráulica 2025",
+                region: "Todas as regiões de Brasília e algumas localidades de Goiânia",
+                info: "(61) 983885138 - Chave Pix - maydylenandroid@gmail.com"
+            },
+            {
+                id: "gb-2",
+                state: "Goiânia e Brasília",
+                name: "Erivan Hidramar - 2025",
+                region: "Brasília e Goiânia",
+                info: "Informações sob consulta"
+            },
+
+            // Fortaleza
+            {
+                id: "fo-1",
+                state: "Fortaleza",
+                name: "Fortaleza Parcerias",
+                region: "Fortaleza, Aquiraz, Eusébio e Porto das Dunas",
+                info: "(85) 998153317"
+            },
+
+            // Recife
+            {
+                id: "re-1",
+                state: "Recife",
+                name: "C.Hidráulica Aldeia 2025",
+                region: "Recife, Jaboatão, Olinda, Paulista, C.de Santo Agostinho, Paudalho e Carpina",
+                info: "(81) 999235529 - número é whats e chave Pix"
+            }
+        ];
+
+        let directoryData = [];
+
+        // Initialize application
+        function initApp() {
+            const savedData = localStorage.getItem('technician_directory_data');
+            if (savedData) {
+                try {
+                    directoryData = JSON.parse(savedData);
+                } catch (e) {
+                    directoryData = defaultDirectoryData;
+                }
+            } else {
+                directoryData = defaultDirectoryData;
+                saveToLocalStorage();
+            }
+            populateStateFilter();
+            renderDirectory(directoryData);
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('technician_directory_data', JSON.stringify(directoryData));
+        }
+
+        function populateStateFilter() {
+            const stateFilter = document.getElementById('stateFilter');
+            const currentState = stateFilter.value;
+            
+            // Extract unique states
+            const states = [...new Set(directoryData.map(item => item.state))].sort();
+            
+            stateFilter.innerHTML = '<option value="">Todos os Estados</option>';
+            states.forEach(state => {
+                const option = document.createElement('option');
+                option.value = state;
+                option.textContent = state;
+                if (state === currentState) option.selected = true;
+                stateFilter.appendChild(option);
+            });
+        }
+
+        function renderDirectory(dataToRender) {
+            const container = document.getElementById('directoryContainer');
+            const emptyState = document.getElementById('emptyState');
+            container.innerHTML = '';
+
+            if (dataToRender.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            // Group by state
+            const grouped = {};
+            dataToRender.forEach(item => {
+                if (!grouped[item.state]) {
+                    grouped[item.state] = [];
+                }
+                grouped[item.state].push(item);
+            });
+
+            // Sort states alphabetically
+            const sortedStates = Object.keys(grouped).sort();
+
+            sortedStates.forEach(state => {
+                const items = grouped[state];
+                
+                const stateCard = document.createElement('div');
+                stateCard.className = 'bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden';
+                
+                let html = `
+                    <div class="bg-slate-800 text-white px-6 py-3.5 flex justify-between items-center">
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-map-location-dot text-indigo-400"></i>
+                            <h2 class="text-base font-bold tracking-wide">${state}</h2>
+                            <span class="bg-slate-700 text-indigo-200 text-xs px-2.5 py-0.5 rounded-full font-medium ml-2">${items.length} ${items.length === 1 ? 'parceiro' : 'parceiros'}</span>
+                        </div>
+                    </div>
+                    <div class="divide-y divide-slate-100">
+                `;
+
+                items.forEach(item => {
+                    html += `
+                        <div class="p-4 sm:p-5 hover:bg-slate-50/80 transition flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div class="space-y-1.5 flex-grow">
+                                <div class="flex items-center gap-2">
+                                    <h3 class="font-bold text-slate-800 text-base">${escapeHTML(item.name)}</h3>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-600 flex items-start gap-2">
+                                    <i class="fa-solid fa-location-dot text-rose-500 mt-1 shrink-0"></i>
+                                    <span>${escapeHTML(item.region)}</span>
+                                </p>
+                            </div>
+                            <div class="flex flex-col sm:flex-row md:items-center gap-3 shrink-0">
+                                <div class="bg-indigo-50 border border-indigo-100 text-indigo-900 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-2">
+                                    <i class="fa-solid fa-phone text-indigo-600"></i>
+                                    <span>${escapeHTML(item.info)}</span>
+                                </div>
+                                <div class="flex items-center gap-1.5 self-end sm:self-center">
+                                    <button onclick="openEditModal('${item.id}')" title="Editar" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                    <button onclick="deleteRecord('${item.id}')" title="Excluir" class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+                stateCard.innerHTML = html;
+                container.appendChild(stateCard);
+            });
+        }
+
+        function filterData() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const selectedState = document.getElementById('stateFilter').value;
+
+            const filtered = directoryData.filter(item => {
+                const matchesState = !selectedState || item.state === selectedState;
+                const matchesQuery = !query || 
+                    item.name.toLowerCase().includes(query) || 
+                    item.region.toLowerCase().includes(query) || 
+                    item.state.toLowerCase().includes(query) || 
+                    item.info.toLowerCase().includes(query);
+                
+                return matchesState && matchesQuery;
+            });
+
+            renderDirectory(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('stateFilter').value = '';
+            renderDirectory(directoryData);
+        }
+
+        // Modal Controls
+        const recordModal = document.getElementById('recordModal');
+        const exportModal = document.getElementById('exportModal');
+        const formStateSelect = document.getElementById('formState');
+        const customStateContainer = document.getElementById('customStateContainer');
+
+        formStateSelect.addEventListener('change', function() {
+            if (this.value === 'Outro') {
+                customStateContainer.classList.remove('hidden');
+                document.getElementById('formCustomState').setAttribute('required', 'true');
+            } else {
+                customStateContainer.classList.add('hidden');
+                document.getElementById('formCustomState').removeAttribute('required');
+            }
+        });
+
+        function openModal() {
+            document.getElementById('modalTitle').textContent = 'Novo Registro de Técnico/Parceiro';
+            document.getElementById('recordForm').reset();
+            document.getElementById('recordId').value = '';
+            customStateContainer.classList.add('hidden');
+            recordModal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            recordModal.classList.add('hidden');
+        }
+
+        function openEditModal(id) {
+            const item = directoryData.find(d => d.id === id);
+            if (!item) return;
+
+            document.getElementById('modalTitle').textContent = 'Editar Registro';
+            document.getElementById('recordId').value = item.id;
+            document.getElementById('formName').value = item.name;
+            document.getElementById('formRegion').value = item.region;
+            document.getElementById('formInfo').value = item.info;
+
+            // Check if state exists in standard select list
+            const options = Array.from(formStateSelect.options).map(o => o.value);
+            if (options.includes(item.state)) {
+                formStateSelect.value = item.state;
+                customStateContainer.classList.add('hidden');
+            } else {
+                formStateSelect.value = 'Outro';
+                customStateContainer.classList.remove('hidden');
+                document.getElementById('formCustomState').value = item.state;
+            }
+
+            recordModal.classList.remove('hidden');
+        }
+
+        function saveRecord(e) {
+            e.preventDefault();
+            const id = document.getElementById('recordId').value;
+            let state = formStateSelect.value;
+            if (state === 'Outro') {
+                state = document.getElementById('formCustomState').value.trim();
+                if (!state) return;
+            }
+
+            const name = document.getElementById('formName').value.trim();
+            const region = document.getElementById('formRegion').value.trim();
+            const info = document.getElementById('formInfo').value.trim();
+
+            if (id) {
+                // Edit existing
+                const index = directoryData.findIndex(d => d.id === id);
+                if (index !== -1) {
+                    directoryData[index] = { id, state, name, region, info };
+                    showNotification('Registro atualizado com sucesso!', 'success');
+                }
+            } else {
+                // Create new
+                const newId = 'rec-' + Date.now();
+                directoryData.push({ id: newId, state, name, region, info });
+                showNotification('Novo registro adicionado com sucesso!', 'success');
+            }
+
+            saveToLocalStorage();
+            populateStateFilter();
+            filterData();
+            closeModal();
+        }
+
+        function deleteRecord(id) {
+            if (confirm('Tem certeza que deseja excluir este registro?')) {
+                directoryData = directoryData.filter(d => d.id !== id);
+                saveToLocalStorage();
+                populateStateFilter();
+                filterData();
+                showNotification('Registro removido com sucesso.', 'info');
+            }
+        }
+
+        // Export / Import Modals
+        function openExportModal() {
+            exportModal.classList.remove('hidden');
+        }
+
+        function closeExportModal() {
+            exportModal.classList.add('hidden');
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(directoryData, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "diretorio_tecnicos_parceiros.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showNotification('Arquivo de backup exportado com sucesso!', 'success');
+        }
+
+        function importData() {
+            const fileInput = document.getElementById('importFile');
+            if (fileInput.files.length === 0) {
+                alert('Selecione um arquivo JSON primeiro.');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (Array.isArray(imported)) {
+                        directoryData = imported;
+                        saveToLocalStorage();
+                        populateStateFilter();
+                        filterData();
+                        closeExportModal();
+                        showNotification('Dados importados com sucesso!', 'success');
+                    } else {
+                        alert('Formato de arquivo inválido.');
+                    }
+                } catch (err) {
+                    alert('Erro ao processar o arquivo JSON.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function resetToDefaultData() {
+            if (confirm('Deseja restaurar todos os dados originais da imagem? Suas alterações manuais serão perdidas.')) {
+                directoryData = [...defaultDirectoryData];
+                saveToLocalStorage();
+                populateStateFilter();
+                filterData();
+                closeExportModal();
+                showNotification('Dados originais restaurados com sucesso!', 'info');
+            }
+        }
+
+        function showNotification(message, type) {
+            const area = document.getElementById('notificationArea');
+            const alertBox = document.createElement('div');
+            
+            let bgClass = 'bg-emerald-50 border-emerald-200 text-emerald-800';
+            let icon = 'fa-circle-check text-emerald-500';
+            if (type === 'info') {
+                bgClass = 'bg-indigo-50 border-indigo-200 text-indigo-800';
+                icon = 'fa-circle-info text-indigo-500';
+            }
+
+            alertBox.className = `p-4 rounded-xl border flex items-center justify-between shadow-sm animate-fade-in ${bgClass}`;
+            alertBox.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid ${icon} text-lg"></i>
+                    <span class="text-sm font-medium">${message}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            `;
+
+            area.appendChild(alertBox);
+            setTimeout(() => {
+                if (alertBox.parentElement) alertBox.remove();
+            }, 4000);
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        // Run on load
+        window.onload = initApp;
+    </script>
+</body>
+</html>
