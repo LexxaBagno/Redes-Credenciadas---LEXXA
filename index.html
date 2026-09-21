@@ -13,33 +13,38 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-track { background: #18181b; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #52525b; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 h-full flex flex-col antialiased">
+<body class="bg-zinc-950 text-zinc-100 h-full flex flex-col antialiased relative selection:bg-zinc-700 selection:text-white">
+
+    <!-- Background Image with Fade Out / Overlay for maximum legibility -->
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <img src="ALIEN (2).jpg" alt="Background LEXXA" class="w-full h-full object-cover opacity-15 filter blur-[2px] scale-105">
+        <div class="absolute inset-0 bg-gradient-to-b from-zinc-950/90 via-zinc-950/85 to-zinc-950/95"></div>
+    </div>
 
     <!-- Header -->
-    <header class="bg-indigo-700 text-white shadow-md sticky top-0 z-30">
+    <header class="bg-zinc-900/90 backdrop-blur-md border-b border-zinc-800 text-zinc-100 shadow-xl sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <div class="bg-indigo-600 p-2.5 rounded-xl border border-indigo-500 shadow-inner">
-                    <i class="fa-solid fa-address-book text-2xl text-white"></i>
+                <div class="bg-zinc-800 p-2.5 rounded-xl border border-zinc-700 shadow-inner text-zinc-200">
+                    <i class="fa-solid fa-address-book text-2xl text-zinc-100"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Redes Credenciadas - LEXXA</h1>
-                    <p class="text-xs sm:text-sm text-indigo-200">Gerenciamento de Técnicos e Parceiros</p>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        LEXXA <span class="text-xs font-semibold bg-zinc-800 text-zinc-300 px-2 py-0.5 rounded-full border border-zinc-700 uppercase tracking-widest">Redes Credenciadas</span>
+                    </h1>
+                    <p class="text-xs sm:text-sm text-zinc-400">Gerenciamento profissional de Técnicos e Parceiros</p>
                 </div>
             </div>
             <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
-                <button onclick="openHelpModal()" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium px-3.5 py-2 rounded-xl transition shadow-sm border border-indigo-500" title="Ajuda GitHub Pages">
-                    <i class="fa-solid fa-circle-question"></i> <span class="hidden md:inline">Ajuda 404</span>
+                <button onclick="openExportModal()" class="inline-flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-sm font-medium px-4 py-2.5 rounded-xl transition shadow-sm border border-zinc-700">
+                    <i class="fa-solid fa-download text-zinc-400"></i> Exportar / Importar
                 </button>
-                <button onclick="openExportModal()" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-xl transition shadow-sm border border-indigo-500">
-                    <i class="fa-solid fa-download"></i> Exportar/Importar
-                </button>
-                <button onclick="openModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium px-4 py-2 rounded-xl transition shadow-sm">
+                <button onclick="openModal()" class="inline-flex items-center gap-2 bg-zinc-100 hover:bg-white text-zinc-950 text-sm font-semibold px-4 py-2.5 rounded-xl transition shadow-md">
                     <i class="fa-solid fa-plus"></i> Novo Registro
                 </button>
             </div>
@@ -47,27 +52,27 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col gap-6">
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col gap-6 relative z-10">
         
         <!-- Search and Filter Bar -->
-        <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div class="bg-zinc-900/80 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-xl border border-zinc-800 flex flex-col md:flex-row gap-4 items-center justify-between">
             <div class="relative w-full md:w-96">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-zinc-400">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </span>
                 <input type="text" id="searchInput" oninput="filterData()" placeholder="Buscar por técnico, região, estado ou telefone..." 
-                    class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
+                    class="w-full pl-10 pr-4 py-2.5 bg-zinc-950/80 border border-zinc-800 rounded-xl text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:border-transparent transition">
             </div>
 
             <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
                 <div class="flex items-center gap-2 w-full sm:w-auto">
-                    <label for="stateFilter" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Estado:</label>
-                    <select id="stateFilter" onchange="filterData()" class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 flex-grow sm:flex-grow-0">
+                    <label for="stateFilter" class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Estado:</label>
+                    <select id="stateFilter" onchange="filterData()" class="bg-zinc-950/80 border border-zinc-800 text-zinc-300 text-sm rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-zinc-400 flex-grow sm:flex-grow-0">
                         <option value="">Todos os Estados</option>
                     </select>
                 </div>
 
-                <button onclick="resetFilters()" class="text-sm text-slate-500 hover:text-indigo-600 px-3 py-2 rounded-xl hover:bg-slate-100 transition font-medium">
+                <button onclick="resetFilters()" class="text-sm text-zinc-400 hover:text-zinc-100 px-3 py-2 rounded-xl hover:bg-zinc-800/80 transition font-medium">
                     <i class="fa-solid fa-rotate-right mr-1"></i> Limpar Filtros
                 </button>
             </div>
@@ -82,24 +87,24 @@
         </div>
 
         <!-- Empty State -->
-        <div id="emptyState" class="hidden flex flex-col items-center justify-center p-12 text-center bg-white rounded-2xl border border-slate-200 shadow-sm">
-            <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center text-2xl mb-4">
+        <div id="emptyState" class="hidden flex flex-col items-center justify-center p-12 text-center bg-zinc-900/80 backdrop-blur-md rounded-2xl border border-zinc-800 shadow-xl">
+            <div class="w-16 h-16 bg-zinc-800 text-zinc-400 rounded-full flex items-center justify-center text-2xl mb-4 border border-zinc-700">
                 <i class="fa-solid fa-folder-open"></i>
             </div>
-            <h3 class="text-lg font-bold text-slate-700 mb-1">Nenhum registro encontrado</h3>
-            <p class="text-sm text-slate-500 max-w-sm mb-6">Tente buscar por outro termo ou adicione um novo técnico/parceiro ao diretório.</p>
-            <button onclick="openModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition shadow-sm">
+            <h3 class="text-lg font-bold text-zinc-200 mb-1">Nenhum registro encontrado</h3>
+            <p class="text-sm text-zinc-400 max-w-sm mb-6">Tente buscar por outro termo ou adicione um novo técnico/parceiro ao diretório.</p>
+            <button onclick="openModal()" class="bg-zinc-100 hover:bg-white text-zinc-950 text-sm font-semibold px-4 py-2.5 rounded-xl transition shadow-md">
                 Adicionar Novo Registro
             </button>
         </div>
     </main>
 
     <!-- Modal for Add/Edit Record -->
-    <div id="recordModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full overflow-hidden border border-slate-200 transform transition-all">
-            <div class="bg-indigo-700 px-6 py-4 text-white flex justify-between items-center">
+    <div id="recordModal" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-zinc-900 rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-zinc-800 transform transition-all">
+            <div class="bg-zinc-950 px-6 py-4 border-b border-zinc-800 flex justify-between items-center text-white">
                 <h3 id="modalTitle" class="text-lg font-bold">Novo Registro de Técnico/Parceiro</h3>
-                <button onclick="closeModal()" class="text-indigo-200 hover:text-white p-1 rounded-lg transition">
+                <button onclick="closeModal()" class="text-zinc-400 hover:text-white p-1 rounded-lg transition">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
@@ -107,8 +112,8 @@
                 <input type="hidden" id="recordId">
                 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Estado / Região Principal *</label>
-                    <select id="formState" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Estado / Região Principal *</label>
+                    <select id="formState" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-400">
                         <option value="">Selecione o Estado</option>
                         <option value="Rio Grande do Sul">Rio Grande do Sul</option>
                         <option value="Minas Gerais">Minas Gerais</option>
@@ -125,30 +130,30 @@
                 </div>
 
                 <div id="customStateContainer" class="hidden">
-                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Nome do Novo Estado *</label>
-                    <input type="text" id="formCustomState" placeholder="Ex: Santa Catarina" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Nome do Novo Estado *</label>
+                    <input type="text" id="formCustomState" placeholder="Ex: Santa Catarina" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-zinc-400">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Nome do Técnico / Parceiro *</label>
-                    <input type="text" id="formName" required placeholder="Ex: Tiago Souza (2026)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Nome do Técnico / Parceiro *</label>
+                    <input type="text" id="formName" required placeholder="Ex: Tiago Souza (2026)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-zinc-400">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Área de Atuação / Região Atendida *</label>
-                    <textarea id="formRegion" required rows="3" placeholder="Ex: Porto Alegre e Região Metropolitana..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                    <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Área de Atuação / Região Atendida *</label>
+                    <textarea id="formRegion" required rows="3" placeholder="Ex: Porto Alegre e Região Metropolitana..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-zinc-400"></textarea>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Informações / Telefones de Contato *</label>
-                    <input type="text" id="formInfo" required placeholder="Ex: (51) 994683323" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Informações / Telefones de Contato *</label>
+                    <input type="text" id="formInfo" required placeholder="Ex: (51) 994683323" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-zinc-400">
                 </div>
 
-                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-xl transition">
+                <div class="flex justify-end gap-3 pt-4 border-t border-zinc-800">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-sm font-medium rounded-xl transition">
                         Cancelar
                     </button>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-xl transition shadow-sm">
+                    <button type="submit" class="px-4 py-2 bg-zinc-100 hover:bg-white text-zinc-950 text-sm font-semibold rounded-xl transition shadow-md">
                         Salvar Registro
                     </button>
                 </div>
@@ -157,36 +162,36 @@
     </div>
 
     <!-- Export/Import Modal -->
-    <div id="exportModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full overflow-hidden border border-slate-200">
-            <div class="bg-indigo-700 px-6 py-4 text-white flex justify-between items-center">
+    <div id="exportModal" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-zinc-900 rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-zinc-800">
+            <div class="bg-zinc-950 px-6 py-4 border-b border-zinc-800 flex justify-between items-center text-white">
                 <h3 class="text-lg font-bold">Exportar / Importar Dados</h3>
-                <button onclick="closeExportModal()" class="text-indigo-200 hover:text-white p-1 rounded-lg transition">
+                <button onclick="closeExportModal()" class="text-zinc-400 hover:text-white p-1 rounded-lg transition">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
             <div class="p-6 space-y-4">
-                <p class="text-sm text-slate-600">Você pode exportar todos os dados atuais em formato JSON para backup ou importar um arquivo JSON salvo anteriormente.</p>
+                <p class="text-sm text-zinc-400">Você pode exportar todos os dados atuais em formato JSON para backup ou importar um arquivo JSON salvo anteriormente.</p>
                 
                 <div>
-                    <button onclick="exportData()" class="w-full mb-3 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-xl transition shadow-sm text-sm">
-                        <i class="fa-solid fa-download"></i> Baixar Backup (JSON)
+                    <button onclick="exportData()" class="w-full mb-3 flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-medium py-2.5 px-4 rounded-xl transition shadow-sm text-sm border border-zinc-700">
+                        <i class="fa-solid fa-download text-zinc-400"></i> Baixar Backup (JSON)
                     </button>
                 </div>
 
-                <div class="border-t border-slate-200 pt-4">
-                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Restaurar / Importar Dados</label>
-                    <input type="file" id="importFile" accept=".json" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
-                    <button onclick="importData()" class="mt-2 w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-900 text-white font-medium py-2.5 px-4 rounded-xl transition shadow-sm text-sm">
+                <div class="border-t border-zinc-800 pt-4">
+                    <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Restaurar / Importar Dados</label>
+                    <input type="file" id="importFile" accept=".json" class="w-full text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-zinc-800 file:text-zinc-200 hover:file:bg-zinc-700 cursor-pointer">
+                    <button onclick="importData()" class="mt-2 w-full flex items-center justify-center gap-2 bg-zinc-100 hover:bg-white text-zinc-950 font-semibold py-2.5 px-4 rounded-xl transition shadow-sm text-sm">
                         <i class="fa-solid fa-upload"></i> Carregar Arquivo JSON
                     </button>
                 </div>
 
-                <div class="border-t border-slate-200 pt-4 flex justify-between items-center">
-                    <button onclick="resetToDefaultData()" class="text-xs text-rose-600 hover:text-rose-700 font-medium underline">
+                <div class="border-t border-zinc-800 pt-4 flex justify-between items-center">
+                    <button onclick="resetToDefaultData()" class="text-xs text-zinc-400 hover:text-zinc-200 font-medium underline">
                         Restaurar dados originais
                     </button>
-                    <button onclick="closeExportModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-xl transition">
+                    <button onclick="closeExportModal()" class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-sm font-medium rounded-xl transition">
                         Fechar
                     </button>
                 </div>
@@ -194,44 +199,15 @@
         </div>
     </div>
 
-    <!-- Help Modal (GitHub Pages 404 Guide) -->
-    <div id="helpModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full overflow-hidden border border-slate-200">
-            <div class="bg-amber-600 px-6 py-4 text-white flex justify-between items-center">
-                <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> Resolvendo o Erro 404 no GitHub Pages</h3>
-                <button onclick="closeHelpModal()" class="text-amber-200 hover:text-white p-1 rounded-lg transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-            <div class="p-6 space-y-4 text-sm text-slate-700">
-                <p>O erro <strong>404 (File not found)</strong> ocorre no GitHub Pages porque o servidor procura exatamente por um arquivo chamado <strong>index.html</strong> na raiz do repositório.</p>
-                <div class="bg-amber-50 border border-amber-200 p-3.5 rounded-xl space-y-2">
-                    <p class="font-bold text-amber-900">Como corrigir:</p>
-                    <ol class="list-decimal list-inside space-y-1 text-amber-800">
-                        <li>Certifique-se de que o arquivo salvo no seu computador chama-se exatamente <code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-xs">index.html</code> (com todas as letras minúsculas).</li>
-                        <li>Faça o upload ou commit deste arquivo <code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-xs">index.html</code> na branch principal do repositório (<code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-xs">main</code> ou <code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-xs">master</code>).</li>
-                        <li>Verifique nas configurações do repositório (<code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-xs">Settings > Pages</code>) se o Source está configurado para a branch correta (<code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-xs">/ (root)</code>).</li>
-                    </ol>
-                </div>
-                <div class="flex justify-end pt-2">
-                    <button onclick="closeHelpModal()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-xl transition text-sm">
-                        Entendi
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 mt-auto">
+    <footer class="bg-zinc-900/90 backdrop-blur-md border-t border-zinc-800 py-6 text-center text-xs text-zinc-400 mt-auto relative z-10">
         <div class="max-w-7xl mx-auto px-4">
-            <p>Diretório de Técnicos e Parceiros &copy; 2026 - Dados salvos no armazenamento local (localStorage) do navegador.</p>
+            <p>Diretório de Técnicos e Parceiros &copy; 2026 LEXXA - Dados salvos no armazenamento local (localStorage) do navegador.</p>
         </div>
     </footer>
 
     <!-- JavaScript Application Logic -->
     <script>
-        // Complete initial data extracted from the initial image
         const defaultDirectoryData = [
             // Rio Grande do Sul
             { id: "rs-1", state: "Rio Grande do Sul", name: "Tiago Souza (2026)", region: "Porto Alegre e Região Metropolitana. Atende Rio Grande e Pelotas (60km)", info: "(51) 994683323 / (51) 30156785" },
@@ -364,41 +340,41 @@
             sortedStates.forEach(state => {
                 const items = grouped[state];
                 const stateCard = document.createElement('div');
-                stateCard.className = 'bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden';
+                stateCard.className = 'bg-zinc-900/80 backdrop-blur-md rounded-2xl shadow-xl border border-zinc-800 overflow-hidden';
                 
                 let html = `
-                    <div class="bg-slate-800 text-white px-6 py-3.5 flex justify-between items-center">
+                    <div class="bg-zinc-950 text-zinc-200 px-6 py-3.5 flex justify-between items-center border-b border-zinc-800">
                         <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-map-location-dot text-indigo-400"></i>
-                            <h2 class="text-base font-bold tracking-wide">${state}</h2>
-                            <span class="bg-slate-700 text-indigo-200 text-xs px-2.5 py-0.5 rounded-full font-medium ml-2">${items.length} ${items.length === 1 ? 'parceiro' : 'parceiros'}</span>
+                            <i class="fa-solid fa-map-location-dot text-zinc-400"></i>
+                            <h2 class="text-base font-bold tracking-wide text-white">${state}</h2>
+                            <span class="bg-zinc-800 text-zinc-300 text-xs px-2.5 py-0.5 rounded-full font-medium ml-2 border border-zinc-700">${items.length} ${items.length === 1 ? 'parceiro' : 'parceiros'}</span>
                         </div>
                     </div>
-                    <div class="divide-y divide-slate-100">
+                    <div class="divide-y divide-zinc-800/60">
                 `;
 
                 items.forEach(item => {
                     html += `
-                        <div class="p-4 sm:p-5 hover:bg-slate-50/80 transition flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="p-4 sm:p-5 hover:bg-zinc-800/40 transition flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div class="space-y-1.5 flex-grow">
                                 <div class="flex items-center gap-2">
-                                    <h3 class="font-bold text-slate-800 text-base">${escapeHTML(item.name)}</h3>
+                                    <h3 class="font-bold text-zinc-100 text-base">${escapeHTML(item.name)}</h3>
                                 </div>
-                                <p class="text-xs sm:text-sm text-slate-600 flex items-start gap-2">
-                                    <i class="fa-solid fa-location-dot text-rose-500 mt-1 shrink-0"></i>
+                                <p class="text-xs sm:text-sm text-zinc-400 flex items-start gap-2">
+                                    <i class="fa-solid fa-location-dot text-zinc-500 mt-1 shrink-0"></i>
                                     <span>${escapeHTML(item.region)}</span>
                                 </p>
                             </div>
                             <div class="flex flex-col sm:flex-row md:items-center gap-3 shrink-0">
-                                <div class="bg-indigo-50 border border-indigo-100 text-indigo-900 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-2">
-                                    <i class="fa-solid fa-phone text-indigo-600"></i>
+                                <div class="bg-zinc-950/80 border border-zinc-800 text-zinc-200 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-2">
+                                    <i class="fa-solid fa-phone text-zinc-400"></i>
                                     <span>${escapeHTML(item.info)}</span>
                                 </div>
                                 <div class="flex items-center gap-1.5 self-end sm:self-center">
-                                    <button onclick="openEditModal('${item.id}')" title="Editar" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition">
+                                    <button onclick="openEditModal('${item.id}')" title="Editar" class="p-2 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 rounded-lg transition">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
-                                    <button onclick="deleteRecord('${item.id}')" title="Excluir" class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition">
+                                    <button onclick="deleteRecord('${item.id}')" title="Excluir" class="p-2 text-zinc-400 hover:text-rose-400 hover:bg-zinc-800 rounded-lg transition">
                                         <i class="fa-solid fa-trash-can"></i>
                                     </button>
                                 </div>
@@ -439,7 +415,6 @@
 
         const recordModal = document.getElementById('recordModal');
         const exportModal = document.getElementById('exportModal');
-        const helpModal = document.getElementById('helpModal');
         const formStateSelect = document.getElementById('formState');
         const customStateContainer = document.getElementById('customStateContainer');
 
@@ -531,15 +506,11 @@
 
         function openExportModal() { exportModal.classList.remove('hidden'); }
         function closeExportModal() { exportModal.classList.add('hidden'); }
-        function openHelpModal() { helpModal.classList.remove('hidden'); }
-        function closeHelpModal() { helpModal.classList.add('hidden'); }
 
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(directoryData, null, 2));
             const downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", "index.html");
-            // rename download backup JSON
             downloadAnchor.setAttribute("download", "diretorio_tecnicos_parceiros.json");
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
@@ -591,20 +562,20 @@
             const area = document.getElementById('notificationArea');
             const alertBox = document.createElement('div');
             
-            let bgClass = 'bg-emerald-50 border-emerald-200 text-emerald-800';
-            let icon = 'fa-circle-check text-emerald-500';
+            let bgClass = 'bg-zinc-900 border-zinc-700 text-zinc-100';
+            let icon = 'fa-circle-check text-zinc-300';
             if (type === 'info') {
-                bgClass = 'bg-indigo-50 border-indigo-200 text-indigo-800';
-                icon = 'fa-circle-info text-indigo-500';
+                bgClass = 'bg-zinc-900 border-zinc-700 text-zinc-100';
+                icon = 'fa-circle-info text-zinc-300';
             }
 
-            alertBox.className = `p-4 rounded-xl border flex items-center justify-between shadow-sm animate-fade-in ${bgClass}`;
+            alertBox.className = `p-4 rounded-xl border flex items-center justify-between shadow-xl animate-fade-in ${bgClass}`;
             alertBox.innerHTML = `
                 <div class="flex items-center gap-3">
                     <i class="fa-solid ${icon} text-lg"></i>
                     <span class="text-sm font-medium">${message}</span>
                 </div>
-                <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-600">
+                <button onclick="this.parentElement.remove()" class="text-zinc-400 hover:text-zinc-200">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             `;
