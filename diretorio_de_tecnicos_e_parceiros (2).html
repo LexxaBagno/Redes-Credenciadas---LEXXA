@@ -12,7 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -30,10 +29,13 @@
                 </div>
                 <div>
                     <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Redes Credenciadas - LEXXA</h1>
-                    <p class="text-xs sm:text-sm text-indigo-200">Gerenciamento por Estados, Regiões e Contatos</p>
+                    <p class="text-xs sm:text-sm text-indigo-200">Gerenciamento de Técnicos e Parceiros</p>
                 </div>
             </div>
             <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+                <button onclick="openHelpModal()" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium px-3.5 py-2 rounded-xl transition shadow-sm border border-indigo-500" title="Ajuda GitHub Pages">
+                    <i class="fa-solid fa-circle-question"></i> <span class="hidden md:inline">Ajuda 404</span>
+                </button>
                 <button onclick="openExportModal()" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-xl transition shadow-sm border border-indigo-500">
                     <i class="fa-solid fa-download"></i> Exportar/Importar
                 </button>
@@ -134,12 +136,12 @@
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Área de Atuação / Região Atendida *</label>
-                    <textarea id="formRegion" required rows="3" placeholder="Ex: Porto Alegre e Região Metropolitana. Atende Rio Grande e Pelotas (60km)..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                    <textarea id="formRegion" required rows="3" placeholder="Ex: Porto Alegre e Região Metropolitana..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">Informações / Telefones de Contato *</label>
-                    <input type="text" id="formInfo" required placeholder="Ex: (51) 994683323 ou Chave Pix" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <input type="text" id="formInfo" required placeholder="Ex: (51) 994683323" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
 
                 <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
@@ -182,10 +184,38 @@
 
                 <div class="border-t border-slate-200 pt-4 flex justify-between items-center">
                     <button onclick="resetToDefaultData()" class="text-xs text-rose-600 hover:text-rose-700 font-medium underline">
-                        Restaurar dados originais da imagem
+                        Restaurar dados originais
                     </button>
                     <button onclick="closeExportModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-xl transition">
                         Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal (GitHub Pages 404 Guide) -->
+    <div id="helpModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full overflow-hidden border border-slate-200">
+            <div class="bg-amber-600 px-6 py-4 text-white flex justify-between items-center">
+                <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> Resolvendo o Erro 404 no GitHub Pages</h3>
+                <button onclick="closeHelpModal()" class="text-amber-200 hover:text-white p-1 rounded-lg transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 text-sm text-slate-700">
+                <p>O erro <strong>404 (File not found)</strong> ocorre no GitHub Pages porque o servidor procura exatamente por um arquivo chamado <strong>index.html</strong> na raiz do repositório.</p>
+                <div class="bg-amber-50 border border-amber-200 p-3.5 rounded-xl space-y-2">
+                    <p class="font-bold text-amber-900">Como corrigir:</p>
+                    <ol class="list-decimal list-inside space-y-1 text-amber-800">
+                        <li>Certifique-se de que o arquivo salvo no seu computador chama-se exatamente <code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-xs">index.html</code> (com todas as letras minúsculas).</li>
+                        <li>Faça o upload ou commit deste arquivo <code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-xs">index.html</code> na branch principal do repositório (<code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-xs">main</code> ou <code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-xs">master</code>).</li>
+                        <li>Verifique nas configurações do repositório (<code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-xs">Settings > Pages</code>) se o Source está configurado para a branch correta (<code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-xs">/ (root)</code>).</li>
+                    </ol>
+                </div>
+                <div class="flex justify-end pt-2">
+                    <button onclick="closeHelpModal()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-xl transition text-sm">
+                        Entendi
                     </button>
                 </div>
             </div>
@@ -201,368 +231,79 @@
 
     <!-- JavaScript Application Logic -->
     <script>
-        // Default initial data extracted from the image
+        // Complete initial data extracted from the initial image
         const defaultDirectoryData = [
             // Rio Grande do Sul
-            {
-                id: "rs-1",
-                state: "Rio Grande do Sul",
-                name: "Tiago Souza (2026)",
-                region: "Porto Alegre e Região Metropolitana. Atende Rio Grande e Pelotas (60km)",
-                info: "(51) 994683323 / (51) 30156785"
-            },
-            {
-                id: "rs-2",
-                state: "Rio Grande do Sul",
-                name: "Anttes (Segunda opção)",
-                region: "Anta Gorda, Arroio do Meio, Arvorezinha, Bom Retiro do Sul, Canudos do Valle, Capitão, Colinas, Coqueiro Baixo, Cruzeiro do Sul, Dois Lajeados, Doutor Ricardo, Encantado, Estrela, Fazenda Vilanova, Forquetinha, Ídpolis, Imigrante, Lajeado, Marques de Souza, Muçum, Nova Bréscia",
-                info: "(51) 96833334"
-            },
-            {
-                id: "rs-3",
-                state: "Rio Grande do Sul",
-                name: "Jorge Adriano Basso Monteiro",
-                region: "Cocho e arredores",
-                info: "(51) 991879609"
-            },
-            {
-                id: "rs-4",
-                state: "Rio Grande do Sul",
-                name: "Mineiro",
-                region: "Cocho e arredores",
-                info: "(54) 991269404"
-            },
-            {
-                id: "rs-5",
-                state: "Rio Grande do Sul",
-                name: "Soberano Soluções Hidráulicas - Fernando",
-                region: "Cruz Alta e arredores",
-                info: "(51) 96767798"
-            },
-            {
-                id: "rs-6",
-                state: "Rio Grande do Sul",
-                name: "Água (Thiago)",
-                region: "Santa Maria",
-                info: "(55) 99832757"
-            },
-            {
-                id: "rs-7",
-                state: "Rio Grande do Sul",
-                name: "Elixir (Efapi)",
-                region: "Atende um raio de 130km de Chapecó, Joaçaba, Videira, Caçador, Concórdia, Maravilha, (Rio RS): Nonotai, Trindade, Três Palmeiras, Frederico Westphalen",
-                info: "(49) 988300329"
-            },
-            {
-                id: "rs-8",
-                state: "Rio Grande do Sul",
-                name: "HidrotecRS - Rezmini Hidráulico - Marcos André",
-                region: "Canoas, Sapucaia, Esteio, Gravataí, Cachoeirinha, Nova Santa Rita, Guaíba e todo Litoral menos Torres",
-                info: "(51) 992375092"
-            },
-            {
-                id: "rs-9",
-                state: "Rio Grande do Sul",
-                name: "Eletrosserro",
-                region: "Gramado e Canela",
-                info: "(54) 99031237"
-            },
-            {
-                id: "rs-10",
-                state: "Rio Grande do Sul",
-                name: "Hidro - Reparos - Charles",
-                region: "Erechim, Carazinho, Não me Toque, Marau, Passo Fundo, Sarandi, Tapera, Tapejara, Ibirubá, Espumoso, Lagoa Vermelha, Coxilha e Guaporé",
-                info: "(54) 99504947"
-            },
-            {
-                id: "rs-11",
-                state: "Rio Grande do Sul",
-                name: "Diego - Multi Água (Tobatto)",
-                region: "Anta Gorda, Arroio do Meio, Arvorezinha, Bom Retiro do Sul, Canudos do Valle, Capitão, Colinas, Coqueiro Baixo, Cruzeiro do Sul, Dois Lajeados, Doutor Ricardo, Encantado, Estrela, Fazenda Vilanova, Forquetinha, Ídpolis, Imigrante, Lajeado, Marques de Souza, Muçum, Nova Bréscia, entre ou",
-                info: "(51) 99090688"
-            },
-            {
-                id: "rs-12",
-                state: "Rio Grande do Sul",
-                name: "Müller Comercial - Alexandre 2025",
-                region: "Novo Hamburgo, São Leopoldo, Estância Velha, Ivoti, Dois Irmãos, Sapiranga, Campo Bom, Cachoeirinha, Gramotai",
-                info: "313972307"
-            },
-            {
-                id: "rs-13",
-                state: "Rio Grande do Sul",
-                name: "Solution Assis",
-                region: "Brochinu, Barão de Cotegipe, Getúlio Vargas, Três Arroios, Severiano de Almeida, Concórdia, Gourama, Viadutos, Marcelino Ramos",
-                info: "(54) 99070414"
-            },
-            {
-                id: "rs-14",
-                state: "Rio Grande do Sul",
-                name: "Dalvani dos Santos - 2025",
-                region: "Santa Rosa, Oliva, Ijui, Candói, Cristo Rei, Santo Ângelo, Santiago, São Borja",
-                info: "(55) 21205238"
-            },
-            {
-                id: "rs-15",
-                state: "Rio Grande do Sul",
-                name: "Kiko - Hidráulico - 2025",
-                region: "Lajeado e Arredores",
-                info: "(51) 99960203"
-            },
-            {
-                id: "rs-16",
-                state: "Rio Grande do Sul",
-                name: "Água Quente - Chucca",
-                region: "SC - Criciúma, Araranguá, Içara, Morro da Fumaça, Urussanga, Siderópolis, Nova Veneza",
-                info: "(48) 99776711"
-            },
-            {
-                id: "rs-17",
-                state: "Rio Grande do Sul",
-                name: "AM Reparos (Eduardo)",
-                region: "Região de SC - Criciúma",
-                info: "(48) 96085321"
-            },
+            { id: "rs-1", state: "Rio Grande do Sul", name: "Tiago Souza (2026)", region: "Porto Alegre e Região Metropolitana. Atende Rio Grande e Pelotas (60km)", info: "(51) 994683323 / (51) 30156785" },
+            { id: "rs-2", state: "Rio Grande do Sul", name: "Anttes (Segunda opção)", region: "Anta Gorda, Arroio do Meio, Arvorezinha, Bom Retiro do Sul, Canudos do Valle, Capitão, Colinas, Coqueiro Baixo, Cruzeiro do Sul, Dois Lajeados, Doutor Ricardo, Encantado, Estrela, Fazenda Vilanova, Forquetinha, Ídpolis, Imigrante, Lajeado, Marques de Souza, Muçum, Nova Bréscia", info: "(51) 96833334" },
+            { id: "rs-3", state: "Rio Grande do Sul", name: "Jorge Adriano Basso Monteiro", region: "Cocho e arredores", info: "(51) 991879609" },
+            { id: "rs-4", state: "Rio Grande do Sul", name: "Mineiro", region: "Cocho e arredores", info: "(54) 991269404" },
+            { id: "rs-5", state: "Rio Grande do Sul", name: "Soberano Soluções Hidráulicas - Fernando", region: "Cruz Alta e arredores", info: "(51) 96767798" },
+            { id: "rs-6", state: "Rio Grande do Sul", name: "Água (Thiago)", region: "Santa Maria", info: "(55) 99832757" },
+            { id: "rs-7", state: "Rio Grande do Sul", name: "Elixir (Efapi)", region: "Atende um raio de 130km de Chapecó, Joaçaba, Videira, Caçador, Concórdia, Maravilha, (Rio RS): Nonotai, Trindade, Três Palmeiras, Frederico Westphalen", info: "(49) 988300329" },
+            { id: "rs-8", state: "Rio Grande do Sul", name: "HidrotecRS - Rezmini Hidráulico - Marcos André", region: "Canoas, Sapucaia, Esteio, Gravataí, Cachoeirinha, Nova Santa Rita, Guaíba e todo Litoral menos Torres", info: "(51) 992375092" },
+            { id: "rs-9", state: "Rio Grande do Sul", name: "Eletrosserro", region: "Gramado e Canela", info: "(54) 99031237" },
+            { id: "rs-10", state: "Rio Grande do Sul", name: "Hidro - Reparos - Charles", region: "Erechim, Carazinho, Não me Toque, Marau, Passo Fundo, Sarandi, Tapera, Tapejara, Ibirubá, Espumoso, Lagoa Vermelha, Coxilha e Guaporé", info: "(54) 99504947" },
+            { id: "rs-11", state: "Rio Grande do Sul", name: "Diego - Multi Água (Tobatto)", region: "Anta Gorda, Arroio do Meio, Arvorezinha, Bom Retiro do Sul, Canudos do Valle, Capitão, Colinas, Coqueiro Baixo, Cruzeiro do Sul, Dois Lajeados, Doutor Ricardo, Encantado, Estrela, Fazenda Vilanova, Forquetinha, Ídpolis, Imigrante, Lajeado, Marques de Souza, Muçum, Nova Bréscia", info: "(51) 99090688" },
+            { id: "rs-12", state: "Rio Grande do Sul", name: "Müller Comercial - Alexandre 2025", region: "Novo Hamburgo, São Leopoldo, Estância Velha, Ivoti, Dois Irmãos, Sapiranga, Campo Bom, Cachoeirinha, Gramotai", info: "313972307" },
+            { id: "rs-13", state: "Rio Grande do Sul", name: "Solution Assis", region: "Brochinu, Barão de Cotegipe, Getúlio Vargas, Três Arroios, Severiano de Almeida, Concórdia, Gourama, Viadutos, Marcelino Ramos", info: "(54) 99070414" },
+            { id: "rs-14", state: "Rio Grande do Sul", name: "Dalvani dos Santos - 2025", region: "Santa Rosa, Oliva, Ijui, Candói, Cristo Rei, Santo Ângelo, Santiago, São Borja", info: "(55) 21205238" },
+            { id: "rs-15", state: "Rio Grande do Sul", name: "Kiko - Hidráulico - 2025", region: "Lajeado e Arredores", info: "(51) 99960203" },
+            { id: "rs-16", state: "Rio Grande do Sul", name: "Água Quente - Chucca", region: "SC - Criciúma, Araranguá, Içara, Morro da Fumaça, Urussanga, Siderópolis, Nova Veneza", info: "(48) 99776711" },
+            { id: "rs-17", state: "Rio Grande do Sul", name: "AM Reparos (Eduardo)", region: "Região de SC - Criciúma", info: "(48) 96085321" },
 
             // Minas Gerais
-            {
-                id: "mg-1",
-                state: "Minas Gerais",
-                name: "Rios Dos Reparos (Sebastião)",
-                region: "Ponte Nova, Carandaí, Barbacena, São Gatias, Presidente Olgario, Lagoa Formosa, Patrocínio e Região até 100km",
-                info: "(34) 99151072"
-            },
-            {
-                id: "mg-2",
-                state: "Minas Gerais",
-                name: "Stefano Dutra ME 2025",
-                region: "Varginha, M.E., Alfenas, Paraguaçu, Elói Mendes, Tres Corações, Três Pontas",
-                info: "(35) 992861400"
-            },
-            {
-                id: "mg-3",
-                state: "Minas Gerais",
-                name: "Marcondes - Furabolin",
-                region: "Nova Serrana, Formiga, Divinópolis, Boa Esperança e Arca",
-                info: "(37) 99108907"
-            },
+            { id: "mg-1", state: "Minas Gerais", name: "Rios Dos Reparos (Sebastião)", region: "Ponte Nova, Carandaí, Barbacena, São Gatias, Presidente Olgario, Lagoa Formosa, Patrocínio e Região até 100km", info: "(34) 99151072" },
+            { id: "mg-2", state: "Minas Gerais", name: "Stefano Dutra ME 2025", region: "Varginha, M.E., Alfenas, Paraguaçu, Elói Mendes, Tres Corações, Três Pontas", info: "(35) 992861400" },
+            { id: "mg-3", state: "Minas Gerais", name: "Marcondes - Furabolin", region: "Nova Serrana, Formiga, Divinópolis, Boa Esperança e Arca", info: "(37) 99108907" },
 
             // Curitiba - Paraná
-            {
-                id: "pr-1",
-                state: "Curitiba - Paraná",
-                name: "Luiz Hidráulico LG",
-                region: "Toledo, Cascavel",
-                info: "(45) 998276179"
-            },
-            {
-                id: "pr-2",
-                state: "Curitiba - Paraná",
-                name: "Alex - ASS Instalações",
-                region: "Curitiba",
-                info: "(41) 98660992"
-            },
-            {
-                id: "pr-3",
-                state: "Curitiba - Paraná",
-                name: "Rui Da Tomeira (Rafael) 2026",
-                region: "Curitiba",
-                info: "(41) 992432019"
-            },
+            { id: "pr-1", state: "Curitiba - Paraná", name: "Luiz Hidráulico LG", region: "Toledo, Cascavel", info: "(45) 998276179" },
+            { id: "pr-2", state: "Curitiba - Paraná", name: "Alex - ASS Instalações", region: "Curitiba", info: "(41) 98660992" },
+            { id: "pr-3", state: "Curitiba - Paraná", name: "Rui Da Tomeira (Rafael) 2026", region: "Curitiba", info: "(41) 992432019" },
 
             // São Paulo
-            {
-                id: "sp-1",
-                state: "São Paulo",
-                name: "SOS Soluções e Reparos",
-                region: "Região de Santos/SP",
-                info: "(13) 33027221, (13) 98114-0551"
-            },
-            {
-                id: "sp-2",
-                state: "São Paulo",
-                name: "Hidráulica Martins",
-                region: "Região de Piracicaba",
-                info: "(19) 38173514, (19) 98131-9791"
-            },
-            {
-                id: "sp-3",
-                state: "São Paulo",
-                name: "Technica Rafael",
-                region: "São Paulo/Capital",
-                info: "(11) 984589077"
-            },
-            {
-                id: "sp-4",
-                state: "São Paulo",
-                name: "Hidrotermas SP - Técnico Gustavo",
-                region: "Araraquara, São Carlos, Alphaville e forcana de Antônio de Pernalta",
-                info: "(11) 974151777"
-            },
-            {
-                id: "sp-5",
-                state: "São Paulo",
-                name: "Adriano Terrassa - Instalação André",
-                region: "Santo André, São Caetano, Diadema, Mauá, Osasco, SP (até 100km)",
-                info: "(11) 992984979"
-            },
-            {
-                id: "sp-6",
-                state: "São Paulo",
-                name: "Richard Douglas Correga",
-                region: "Ribeirão Pires/SP (20km)",
-                info: "(11) 97911-2311"
-            },
-            {
-                id: "sp-7",
-                state: "São Paulo",
-                name: "Nelson Salvador Junior - MF 10 Hidráulica (recurso hidroflex)",
-                region: "Atende Cidade de Mauá e Raio de 100km",
-                info: "(11) 984033178"
-            },
-            {
-                id: "sp-8",
-                state: "São Paulo",
-                name: "Celso (Villas Boas Manutenções Residenciais)",
-                region: "Poá, Itaquaquecetuba, Mogi das Cruzes, Região",
-                info: "(11) 973161257"
-            },
-            {
-                id: "sp-9",
-                state: "São Paulo",
-                name: "Daxet Soluções em Hidráulica (Técnico Cleoson)",
-                region: "Pirassununga, Piracicaba, Ribeirão Preto e Raio de 100KM, 1.50 KM raio",
-                info: "(19) 993111339"
-            },
-            {
-                id: "sp-10",
-                state: "São Paulo",
-                name: "SOS - Tec Médicos",
-                region: "Campinas/SP",
-                info: "(19) 941149892"
-            },
-            {
-                id: "sp-11",
-                state: "São Paulo",
-                name: "Fios dos Reparos",
-                region: "Ribeirão Preto/SP",
-                info: "(19) 997389431"
-            },
-            {
-                id: "sp-12",
-                state: "São Paulo",
-                name: "Technica Rocha",
-                region: "Santos, São Vicente, Praia Grande e Mongaguá",
-                info: "(11) 994086192"
-            },
-            {
-                id: "sp-13",
-                state: "São Paulo",
-                name: "Fdson",
-                region: "Araraquara",
-                info: "(19) 991041493"
-            },
-            {
-                id: "sp-14",
-                state: "São Paulo",
-                name: "Moncaiva",
-                region: "Mooca",
-                info: "(11) 993819503"
-            },
-            {
-                id: "sp-15",
-                state: "São Paulo",
-                name: "Yuri Mandelli - Aluguel(Vídeo) 2025",
-                region: "Jundiaí, Várzea, Campo Limpo Paulista, Vinhedo e Louveira",
-                info: "(11) 993859603"
-            },
-            {
-                id: "sp-16",
-                state: "São Paulo",
-                name: "JS Soluções Hidráulicas (Cesar) 2025",
-                region: "Atende somente SP Capital",
-                info: "(11) 961078380"
-            },
+            { id: "sp-1", state: "São Paulo", name: "SOS Soluções e Reparos", region: "Região de Santos/SP", info: "(13) 33027221, (13) 98114-0551" },
+            { id: "sp-2", state: "São Paulo", name: "Hidráulica Martins", region: "Região de Piracicaba", info: "(19) 38173514, (19) 98131-9791" },
+            { id: "sp-3", state: "São Paulo", name: "Technica Rafael", region: "São Paulo/Capital", info: "(11) 984589077" },
+            { id: "sp-4", state: "São Paulo", name: "Hidrotermas SP - Técnico Gustavo", region: "Araraquara, São Carlos, Alphaville e forcana de Antônio de Pernalta", info: "(11) 974151777" },
+            { id: "sp-5", state: "São Paulo", name: "Adriano Terrassa - Instalação André", region: "Santo André, São Caetano, Diadema, Mauá, Osasco, SP (até 100km)", info: "(11) 992984979" },
+            { id: "sp-6", state: "São Paulo", name: "Richard Douglas Correga", region: "Ribeirão Pires/SP (20km)", info: "(11) 97911-2311" },
+            { id: "sp-7", state: "São Paulo", name: "Nelson Salvador Junior - MF 10 Hidráulica (recurso hidroflex)", region: "Atende Cidade de Mauá e Raio de 100km", info: "(11) 984033178" },
+            { id: "sp-8", state: "São Paulo", name: "Celso (Villas Boas Manutenções Residenciais)", region: "Poá, Itaquaquecetuba, Mogi das Cruzes, Região", info: "(11) 973161257" },
+            { id: "sp-9", state: "São Paulo", name: "Daxet Soluções em Hidráulica (Técnico Cleoson)", region: "Pirassununga, Piracicaba, Ribeirão Preto e Raio de 100KM, 1.50 KM raio", info: "(19) 993111339" },
+            { id: "sp-10", state: "São Paulo", name: "SOS - Tec Médicos", region: "Campinas/SP", info: "(19) 941149892" },
+            { id: "sp-11", state: "São Paulo", name: "Fios dos Reparos", region: "Ribeirão Preto/SP", info: "(19) 997389431" },
+            { id: "sp-12", state: "São Paulo", name: "Technica Rocha", region: "Santos, São Vicente, Praia Grande e Mongaguá", info: "(11) 994086192" },
+            { id: "sp-13", state: "São Paulo", name: "Fdson", region: "Araraquara", info: "(19) 991041493" },
+            { id: "sp-14", state: "São Paulo", name: "Moncaiva", region: "Mooca", info: "(11) 993819503" },
+            { id: "sp-15", state: "São Paulo", name: "Yuri Mandelli - Aluguel(Vídeo) 2025", region: "Jundiaí, Várzea, Campo Limpo Paulista, Vinhedo e Louveira", info: "(11) 993859603" },
+            { id: "sp-16", state: "São Paulo", name: "JS Soluções Hidráulicas (Cesar) 2025", region: "Atende somente SP Capital", info: "(11) 961078380" },
 
             // Mato Grosso do Sul
-            {
-                id: "ms-1",
-                state: "Mato Grosso do Sul",
-                name: "Fábio (Casa dos Reparos) 2025",
-                region: "Dourados, Mato Grosso do Sul",
-                info: "(67) 994883200 - Somente ligação"
-            },
+            { id: "ms-1", state: "Mato Grosso do Sul", name: "Fábio (Casa dos Reparos) 2025", region: "Dourados, Mato Grosso do Sul", info: "(67) 994883200 - Somente ligação" },
 
             // Rio de Janeiro
-            {
-                id: "rj-1",
-                state: "Rio de Janeiro",
-                name: "RGS Instalações Hidráulicas",
-                region: "Rio de Janeiro",
-                info: "(21) 996121540"
-            },
-            {
-                id: "rj-2",
-                state: "Rio de Janeiro",
-                name: "Tech Nat Assistencia Tecnica (Pamela ou Manuel)",
-                region: "Todo RJ",
-                info: "(21) 978363896"
-            },
-            {
-                id: "rj-3",
-                state: "Rio de Janeiro",
-                name: "SD Com de Ferramentas e Hidráulicos (Daniel) 2026",
-                region: "Todo RJ",
-                info: "(21) 970865307"
-            },
+            { id: "rj-1", state: "Rio de Janeiro", name: "RGS Instalações Hidráulicas", region: "Rio de Janeiro", info: "(21) 996121540" },
+            { id: "rj-2", state: "Rio de Janeiro", name: "Tech Nat Assistencia Tecnica (Pamela ou Manuel)", region: "Todo RJ", info: "(21) 978363896" },
+            { id: "rj-3", state: "Rio de Janeiro", name: "SD Com de Ferramentas e Hidráulicos (Daniel) 2026", region: "Todo RJ", info: "(21) 970865307" },
 
             // Belo Horizonte
-            {
-                id: "bh-1",
-                state: "Belo Horizonte",
-                name: "Canguuu Soluções Hidráulicas 2025",
-                region: "Betim, Belo Horizonte, Betim, Brumadinho, Caeté, Capim Branco, Confins, Contagem, Esmeraldas, Florestal, Ibirité, Igarapé, Itaguara, Itabirito, Jaboticatubas, Juatuba, Lagoa Santa, Mário Campos, Mateus Leme, Matozinhos, Nova Lima, Nova União",
-                info: "(31) 30421240 / 30241248 / 997205001 - ZAP (31) 994610100"
-            },
+            { id: "bh-1", state: "Belo Horizonte", name: "Canguuu Soluções Hidráulicas 2025", region: "Betim, Belo Horizonte, Betim, Brumadinho, Caeté, Capim Branco, Confins, Contagem, Esmeraldas, Florestal, Ibirité, Igarapé, Itaguara, Itabirito, Jaboticatubas, Juatuba, Lagoa Santa, Mário Campos, Mateus Leme, Matozinhos, Nova Lima, Nova União", info: "(31) 30421240 / 30241248 / 997205001 - ZAP (31) 994610100" },
 
             // Goiânia e Brasília
-            {
-                id: "gb-1",
-                state: "Goiânia e Brasília",
-                name: "Max Hidráulica 2025",
-                region: "Todas as regiões de Brasília e algumas localidades de Goiânia",
-                info: "(61) 983885138 - Chave Pix - maydylenandroid@gmail.com"
-            },
-            {
-                id: "gb-2",
-                state: "Goiânia e Brasília",
-                name: "Erivan Hidramar - 2025",
-                region: "Brasília e Goiânia",
-                info: "Informações sob consulta"
-            },
+            { id: "gb-1", state: "Goiânia e Brasília", name: "Max Hidráulica 2025", region: "Todas as regiões de Brasília e algumas localidades de Goiânia", info: "(61) 983885138 - Chave Pix - maydylenandroid@gmail.com" },
+            { id: "gb-2", state: "Goiânia e Brasília", name: "Erivan Hidramar - 2025", region: "Brasília e Goiânia", info: "Informações sob consulta" },
 
             // Fortaleza
-            {
-                id: "fo-1",
-                state: "Fortaleza",
-                name: "Fortaleza Parcerias",
-                region: "Fortaleza, Aquiraz, Eusébio e Porto das Dunas",
-                info: "(85) 998153317"
-            },
+            { id: "fo-1", state: "Fortaleza", name: "Fortaleza Parcerias", region: "Fortaleza, Aquiraz, Eusébio e Porto das Dunas", info: "(85) 998153317" },
 
             // Recife
-            {
-                id: "re-1",
-                state: "Recife",
-                name: "C.Hidráulica Aldeia 2025",
-                region: "Recife, Jaboatão, Olinda, Paulista, C.de Santo Agostinho, Paudalho e Carpina",
-                info: "(81) 999235529 - número é whats e chave Pix"
-            }
+            { id: "re-1", state: "Recife", name: "C.Hidráulica Aldeia 2025", region: "Recife, Jaboatão, Olinda, Paulista, C.de Santo Agostinho, Paudalho e Carpina", info: "(81) 999235529 - número é whats e chave Pix" }
         ];
 
         let directoryData = [];
 
-        // Initialize application
         function initApp() {
             const savedData = localStorage.getItem('technician_directory_data');
             if (savedData) {
@@ -586,8 +327,6 @@
         function populateStateFilter() {
             const stateFilter = document.getElementById('stateFilter');
             const currentState = stateFilter.value;
-            
-            // Extract unique states
             const states = [...new Set(directoryData.map(item => item.state))].sort();
             
             stateFilter.innerHTML = '<option value="">Todos os Estados</option>';
@@ -612,7 +351,6 @@
                 emptyState.classList.add('hidden');
             }
 
-            // Group by state
             const grouped = {};
             dataToRender.forEach(item => {
                 if (!grouped[item.state]) {
@@ -621,12 +359,10 @@
                 grouped[item.state].push(item);
             });
 
-            // Sort states alphabetically
             const sortedStates = Object.keys(grouped).sort();
 
             sortedStates.forEach(state => {
                 const items = grouped[state];
-                
                 const stateCard = document.createElement('div');
                 stateCard.className = 'bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden';
                 
@@ -701,9 +437,9 @@
             renderDirectory(directoryData);
         }
 
-        // Modal Controls
         const recordModal = document.getElementById('recordModal');
         const exportModal = document.getElementById('exportModal');
+        const helpModal = document.getElementById('helpModal');
         const formStateSelect = document.getElementById('formState');
         const customStateContainer = document.getElementById('customStateContainer');
 
@@ -739,7 +475,6 @@
             document.getElementById('formRegion').value = item.region;
             document.getElementById('formInfo').value = item.info;
 
-            // Check if state exists in standard select list
             const options = Array.from(formStateSelect.options).map(o => o.value);
             if (options.includes(item.state)) {
                 formStateSelect.value = item.state;
@@ -767,14 +502,12 @@
             const info = document.getElementById('formInfo').value.trim();
 
             if (id) {
-                // Edit existing
                 const index = directoryData.findIndex(d => d.id === id);
                 if (index !== -1) {
                     directoryData[index] = { id, state, name, region, info };
                     showNotification('Registro atualizado com sucesso!', 'success');
                 }
             } else {
-                // Create new
                 const newId = 'rec-' + Date.now();
                 directoryData.push({ id: newId, state, name, region, info });
                 showNotification('Novo registro adicionado com sucesso!', 'success');
@@ -796,24 +529,22 @@
             }
         }
 
-        // Export / Import Modals
-        function openExportModal() {
-            exportModal.classList.remove('hidden');
-        }
-
-        function closeExportModal() {
-            exportModal.classList.add('hidden');
-        }
+        function openExportModal() { exportModal.classList.remove('hidden'); }
+        function closeExportModal() { exportModal.classList.add('hidden'); }
+        function openHelpModal() { helpModal.classList.remove('hidden'); }
+        function closeHelpModal() { helpModal.classList.add('hidden'); }
 
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(directoryData, null, 2));
             const downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "index.html");
+            // rename download backup JSON
             downloadAnchor.setAttribute("download", "diretorio_tecnicos_parceiros.json");
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
-            showNotification('Arquivo de backup exportado com sucesso!', 'success');
+            showNotification('Backup exportado com sucesso!', 'success');
         }
 
         function importData() {
@@ -846,7 +577,7 @@
         }
 
         function resetToDefaultData() {
-            if (confirm('Deseja restaurar todos os dados originais da imagem? Suas alterações manuais serão perdidas.')) {
+            if (confirm('Deseja restaurar todos os dados originais? Suas alterações manuais serão perdidas.')) {
                 directoryData = [...defaultDirectoryData];
                 saveToLocalStorage();
                 populateStateFilter();
@@ -890,7 +621,6 @@
             );
         }
 
-        // Run on load
         window.onload = initApp;
     </script>
 </body>
